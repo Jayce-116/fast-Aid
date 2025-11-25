@@ -13,4 +13,3 @@ services:
 databases:
   - name: fastaid-db
     databaseName: fastaid
-    user: postgres

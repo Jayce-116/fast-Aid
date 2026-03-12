@@ -1,9 +1,11 @@
 services:
+  # ---- BACKEND: FastAPI on Render ----
   - type: web
-    name: fast-aid-backend
+    name: fast-aid-api
     runtime: python
-    buildCommand: pip install -r requirements.txt && python -c "from app.database import Base, engine; Base.metadata.create_all(bind=engine)" && python app/seed_guides.py
-    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    rootDir: app
+    buildCommand: pip install -r ../requirements.txt; python seed_guides.py
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
     envVars:
       - key: DATABASE_URL
         value: sqlite:///./fast_aid.db

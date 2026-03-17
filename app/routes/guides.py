@@ -70,6 +70,22 @@ def search_guides(
 
     return {"page": page, "page_size": page_size, "total": total, "items": results}
 
+# Latest (most recent N)
+@router.get("/latest", summary="Latest guides")
+def latest_guides(limit: int = 6, db: Session = Depends(get_db)):
+    items = db.query(Guide).order_by(Guide.id.desc()).limit(limit).all()
+    results = []
+    for g in items:
+        results.append({
+            "id": g.id,
+            "title": g.title,
+            "category": g.category,
+            "urgency": g.urgency,
+            "summary": g.summary,
+            "estimated_time": g.estimated_time
+        })
+    return results
+
 # Get guide by id (with full fields)
 @router.get("/{guide_id}", summary="Get a single guide by id")
 def get_guide(guide_id: int, db: Session = Depends(get_db)):
@@ -87,19 +103,3 @@ def get_guide(guide_id: int, db: Session = Depends(get_db)):
         "donts": json.loads(g.donts) if g.donts else [],
         "estimated_time": g.estimated_time
     }
-
-# Latest (most recent N)
-@router.get("/latest", summary="Latest guides")
-def latest_guides(limit: int = 6, db: Session = Depends(get_db)):
-    items = db.query(Guide).order_by(Guide.id.desc()).limit(limit).all()
-    results = []
-    for g in items:
-        results.append({
-            "id": g.id,
-            "title": g.title,
-            "category": g.category,
-            "urgency": g.urgency,
-            "summary": g.summary,
-            "estimated_time": g.estimated_time
-        })
-    return results

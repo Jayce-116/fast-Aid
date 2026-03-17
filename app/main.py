@@ -1,22 +1,23 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routes import auth
-from app.routes import guides
-from app.routes import guides
+from app.routes import auth, guides
+from app.database import engine, Base
 
+# Ensure all tables are created on startup
+Base.metadata.create_all(bind=engine)
 
-app = FastAPI()
+app = FastAPI(title="FaST Aid API")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],
+    allow_origins=["*"],  # More permissive for development
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
-# Include the auth routes
+
+# Include the routes
 app.include_router(auth.router)
-# Include the guides routes
 app.include_router(guides.router)
 
 

@@ -19,7 +19,7 @@ export default function GuideDetailsPage() {
     if (!id) return;
     
     axios
-      .get(`http://127.0.0.1:8001/api/guides/${id}`)
+      .get(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/guides/${id}`)
       .then((res) => {
         // Parse steps if they are stringified JSON
         const data = res.data;

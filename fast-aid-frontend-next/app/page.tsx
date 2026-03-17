@@ -17,7 +17,7 @@ export default function Home() {
     setLoading(true);
     setNoResults(false);
     axios
-      .get(`http://127.0.0.1:8001/api/guides/search?q=${encodeURIComponent(query)}`)
+      .get(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/guides/search?q=${encodeURIComponent(query)}`)
       .then((res) => {
         const items = res.data.items || [];
         // If exactly 1 result, redirect directly to that guide
